@@ -1,6 +1,6 @@
 [package]
 name = "generic_symbolic_expressions"
-version = "5.0.3"
+version = "5.0.4"
 authors = [
   "Joost Damad <joost@productize.be>, Oliver Flatt <oflatt@cs.washington.edu>",
 ]
@@ -11,5 +11,3 @@ keywords = ["sexp", "s-exp", "symbolic"]
 documentation = "https://docs.rs/generic_symbolic_expressions"
 categories = ["text-processing", "parsing", "encoding"]
 
-[badges]
-travis-ci = { repository = "oflatt/symbolic-expressions" }
