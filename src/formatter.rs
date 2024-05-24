@@ -70,7 +70,7 @@ impl RulesFormatter {
     pub fn new(indent_before: Rules) -> RulesFormatter {
         RulesFormatter {
             indent: vec![b' ', b' '], // two spaces
-            indent_before: indent_before,
+            indent_before,
         }
     }
 }
@@ -81,14 +81,12 @@ impl Formatter for RulesFormatter {
         W: io::Write,
     {
         // if first element is string and it has an indent setting
-        if let Some(sexp) = value {
-            if let Sexp::Symbol(ref s) = *sexp {
-                let s: &str = s;
-                if let Some(&i) = self.indent_before.get(s) {
-                    writer.write_all(b"\n")?;
-                    for _ in 0..i {
-                        writer.write_all(&self.indent)?;
-                    }
+        if let Some(Sexp::Symbol(ref s)) = value {
+            let s: &str = s;
+            if let Some(&i) = self.indent_before.get(s) {
+                writer.write_all(b"\n")?;
+                for _ in 0..i {
+                    writer.write_all(&self.indent)?;
                 }
             }
         }
