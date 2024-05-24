@@ -12,7 +12,7 @@ where
     Self: Sized,
 {
     /// convert from a symbolic-expression to something
-    fn from_sexp(&Sexp) -> Result<Self, SexpError>;
+    fn from_sexp(_: &Sexp) -> Result<Self, SexpError>;
 }
 
 /// convert from a symbolic-expression to something (dispatcher)

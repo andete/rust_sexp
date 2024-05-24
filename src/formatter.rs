@@ -1,7 +1,7 @@
 // (c) 2016 Productize SPRL <joost@productize.be>
 
-use std::io;
 use std::collections::HashMap;
+use std::io;
 
 use error::SexpError;
 use Sexp;
@@ -70,7 +70,7 @@ impl RulesFormatter {
     pub fn new(indent_before: Rules) -> RulesFormatter {
         RulesFormatter {
             indent: vec![b' ', b' '], // two spaces
-            indent_before: indent_before,
+            indent_before,
         }
     }
 }
@@ -81,14 +81,12 @@ impl Formatter for RulesFormatter {
         W: io::Write,
     {
         // if first element is string and it has an indent setting
-        if let Some(sexp) = value {
-            if let Sexp::String(ref s) = *sexp {
-                let s: &str = s;
-                if let Some(&i) = self.indent_before.get(s) {
-                    writer.write_all(b"\n")?;
-                    for _ in 0..i {
-                        writer.write_all(&self.indent)?;
-                    }
+        if let Some(Sexp::Symbol(ref s)) = value {
+            let s: &str = s;
+            if let Some(&i) = self.indent_before.get(s) {
+                writer.write_all(b"\n")?;
+                for _ in 0..i {
+                    writer.write_all(&self.indent)?;
                 }
             }
         }
@@ -103,7 +101,7 @@ impl Formatter for RulesFormatter {
         // don't put the space
         if let Sexp::List(ref l) = *value {
             if !l.is_empty() {
-                if let Sexp::String(ref s) = l[0] {
+                if let Sexp::Symbol(ref s) = l[0] {
                     let s: &str = s; // why needed?
                     if self.indent_before.contains_key(s) {
                         return Ok(());

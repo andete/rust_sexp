@@ -1,10 +1,10 @@
 // (c) 2016-2017 Productize SPRL <joost@productize.be>
 
-use std::string;
-use std::io;
-use std::num;
 use std::error;
 use std::fmt;
+use std::io;
+use std::num;
+use std::string;
 
 /// errors that can happen in this library
 #[derive(Debug)]
@@ -43,7 +43,7 @@ impl error::Error for SexpError {
         "symbolic expressions error"
     }
 
-    fn cause(&self) -> Option<&error::Error> {
+    fn cause(&self) -> Option<&dyn error::Error> {
         match *self {
             SexpError::Parse(_) | SexpError::Other(_) => None,
             SexpError::Io(ref e) => Some(e),
@@ -56,6 +56,7 @@ impl error::Error for SexpError {
 
 /// detailed symbolic-expression parse error information
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct ParseError {
     msg: String,
     line: usize,
@@ -100,10 +101,6 @@ impl From<num::ParseIntError> for SexpError {
 
 /// utility function that creates a symbolic-expressions Error Result for a parser error
 pub fn parse_error<T>(line: usize, col: usize, msg: String) -> Result<T, SexpError> {
-    let pe = ParseError {
-        msg: msg,
-        line: line,
-        col: col,
-    };
+    let pe = ParseError { msg, line, col };
     Err(SexpError::Parse(pe))
 }
